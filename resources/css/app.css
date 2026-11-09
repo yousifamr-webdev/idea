@@ -1,9 +1,60 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+
+@import "./components/btn.css" layer(components);
+@import "./components/form.css" layer(components);
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+
+@custom-variant dark (&:where(.dark, .dark *));
+@theme inline {
+    --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-muted-foreground: var(--muted-foreground);
+}
+
+/* Light theme */
+:root {
+    color-scheme: light;
+
+    --background: #F5F6F2;
+    --foreground: #202824;
+    --card: #FFFFFF;
+
+    --primary: #243B35;
+    --primary-foreground: #FFFFFF;
+
+    --border: #E4E9E3;
+    --input: #E4E9E3;
+    --muted-foreground: #78827B;
+
+    --accent: #6B8F71;
+    --highlight: #D9A441;
+}
+
+/* Dark theme */
+.dark {
+    color-scheme: dark;
+
+    --background: #141C18;
+    --foreground: #E8EEE9;
+    --card: #1D2922;
+
+    --primary: #8FB99A;
+    --primary-foreground: #142019;
+
+    --border: #35453A;
+    --input: #35453A;
+    --muted-foreground: #A0ADA4;
+
+    --accent: #B9D2BD;
+    --highlight: #E2B45E;
 }
