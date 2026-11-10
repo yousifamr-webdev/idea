@@ -21,7 +21,7 @@ $attributes = $request->validate([
             ]);
 
             if(! Auth::attempt($attributes)){
-                return back()->withErrors('password','Wrong password')->withInput();
+                return back()->withErrors(['password'=>'Wrong password'])->withInput();
             }
 
             $request->session()->regenerate();
