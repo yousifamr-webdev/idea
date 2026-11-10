@@ -1,3 +1,5 @@
+import './bootstrap';
+
 const themeToggle = document.getElementById('theme-toggle');
 
 if (themeToggle instanceof HTMLButtonElement) {
