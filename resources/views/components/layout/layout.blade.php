@@ -24,7 +24,7 @@
 
 <body class="bg-background text-foreground mx-auto container">
     <x-layout.nav />
-    <main class="mx-auto w-2xs sm:w-xl md:w-2xl lg:w-4xl">
+    <main class="mx-auto w-2xs sm:w-xl md:w-2xl lg:w-4xl mb-8">
         {{ $slot }}
 
     </main>

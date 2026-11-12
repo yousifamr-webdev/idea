@@ -59,7 +59,7 @@ if (! in_array($status, IdeaStatus::values())){
      */
     public function show(Idea $idea)
     {
-        //
+        return view('idea.show',['idea' => $idea]);
     }
 
     /**
@@ -83,6 +83,8 @@ if (! in_array($status, IdeaStatus::values())){
      */
     public function destroy(Idea $idea)
     {
-        //
+        $idea->delete();
+
+        return to_route('idea.index');
     }
 }
