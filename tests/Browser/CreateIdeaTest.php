@@ -1,24 +1,27 @@
 <?php
 
-use App\Models\Idea;
 use App\Models\User;
 
 it('creates a new idea', function () {
-
-    $this->actingAs($user = User::factory()->create());
+    $user = User::factory()->create();
+    $this->actingAs($user);
 
     visit('/ideas')
         ->click('@create-idea-button')
         ->fill('title', 'Some Example Title')
         ->click('@button-status-completed')
         ->fill('description', 'An example description')
-        ->click('create')
-        ->assertPathIs('/ideas');
+        ->fill('#new-link', 'http://www.example.com')
+        ->click('@submit-new-link-button')
+        ->click('button[type="submit"]')
+        ->assertPathIs('/ideas')
+        ->assertSee('Some Example Title')
+        ->assertNoJavaScriptErrors();
 
+    $idea = $user->ideas()->sole();
 
-    expect($user->ideas()->first())->toMatchArray([
-        'title' => 'Some Example Title',
-        'status' => 'completed' ,
-        'description' => 'An example description'
-    ]);
+    expect($idea->title)->toBe('Some Example Title');
+    expect($idea->status->value)->toBe('completed');
+    expect($idea->description)->toBe('An example description');
+    expect($idea->links->getArrayCopy())->toBe(['http://www.example.com']);
 });
