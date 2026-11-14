@@ -5,7 +5,7 @@
             <p class="text-muted-foreground text-sm mt-2">Capture your thoughts. Make a plan.</p>
 
             <x-card x-data @click="$dispatch('open-modal','create-idea')" is="button" type="button"
-                class="mt-10 cursor-pointer h-32 w-full text-left">
+                data-test="create-idea-button" class="mt-10 cursor-pointer h-32 w-full text-left">
 
                 <p> What's the idea?</p>
 
@@ -31,7 +31,8 @@
                                 {{ $idea->status->label() }}
                             </x-status-label>
                         </div>
-                        <div class="mt-5 line-clamp-3">{{ $idea->description }}</div>
+                        <div class="{{ $idea->description ? 'mt-5 line-clamp-3' : 'hidden' }}">
+                            {{ $idea->description }}</div>
                         <div class="mt-4">{{ $idea->created_at->diffForHumans() }}</div>
                     </x-card>
                 @empty
@@ -40,9 +41,49 @@
             </div>
         </div>
 
-      <x-modal name="create-idea" title="New Idea">
-        <p>I am a modal</p>
-      </x-modal>
+        <x-modal name="create-idea" title="New Idea">
+            <form x-data="{ status: 'pending' }" method="POST" action="{{ route('idea.store') }}">
+                @csrf
+                <div class="space-y-6">
+                    <x-form.field label="Title" name="title" placeholder="Enter an idea for your title" autofocus
+                        required />
+
+
+                    <div class="space-y-2">
+                        <label for="status" class="label">Status</label>
+                        <div class="flex gap-x-3">
+                            @foreach (App\IdeaStatus::cases() as $status)
+                                <button type="button" @click="status = @js($status->value)"
+                                    data-test="button-status-{{ $status->value }}" class="btn flex-1 h-10"
+                                    :class="status === @js($status->value) ? '' : 'btn-outlined'">
+                                    {{ $status->label() }} </button>
+                            @endforeach
+
+
+                            <input type="text" name="status" :value="status" class="hidden">
+                        </div>
+
+                        <x-form.error name="status" />
+
+
+
+                        <x-form.field label="Description" type="textarea" name="description"
+                            placeholder="Describe your idea..." autofocus />
+
+                        <div class="flex justify-end gap-x-5">
+                            <button type="button" @click="$dispatch('close-modal')">Cancel</button>
+                            <button type="submit" class="btn">Create</button>
+
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+        </x-modal>
 
     </div>
 </x-layout>
