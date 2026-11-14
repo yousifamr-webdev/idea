@@ -1,9 +1,10 @@
 <x-layout>
     <div class="py-8 max-w-4xl mx-auto">
         <div class="flex justify-between items-center">
-            <a href="{{ route('idea.index') }}" class="flex items-center gap-x-2 text-sm font-medium text-center justify-center">
+            <a href="{{ route('idea.index') }}"
+                class="flex items-center gap-x-2 text-sm font-medium text-center justify-center">
 
-               <x-lucide-arrow-left-to-line class="w-6 h-6 text-primary-500"/> <span> Back to Ideas</span>
+                <x-lucide-arrow-left-to-line class="w-6 h-6 text-primary-500" /> <span> Back to Ideas</span>
             </a>
 
             <div class="gap-x-3 flex items-center">
@@ -32,6 +33,31 @@
                 <div class="text-foreground max-w-none cursor-pointer">{{ $idea->description }}</div>
             </x-card>
 
+            @if ($idea->steps->count())
+                <div>
+
+                    <h3 class="font-bold text-xl mt-6">Actionable Steps</h3>
+                    <div class="mt-4 space-y-2">
+                        @foreach ($idea->steps as $step)
+                            <x-card>
+                                <form method="POST" action="{{ route('step.update', $step) }}">
+                                    @csrf
+                                    @method('PATCH')
+                                    <div class="flex items-center gap-x-3">
+                                        <button type="submit" role="checkbox"
+                                            class="size-5 flex items-center justify-center rounded-lg text-primary-foreground {{ $step->completed ? 'bg-primary' : 'border border-primary' }} ">
+                                            <x-lucide-check class="size-4" />
+                                        </button>
+                                        <span class=" {{ $step->completed ? 'line-through text-muted-foreground' : '' }}">{{ $step->description }}</span>
+                                    </div>
+                                </form>
+                            </x-card>
+                        @endforeach
+
+                    </div>
+
+                </div>
+            @endif
 
             @if ($idea->links->count())
                 <div>
@@ -39,7 +65,8 @@
                     <h3 class="font-bold text-xl mt-6">Links</h3>
                     <div class="mt-4 space-y-2">
                         @foreach ($idea->links as $link)
-                            <x-card :href="$link" class="text-primary font-medium flex gap-x-3 items-center">{{ $link }}</x-card>
+                            <x-card :href="$link"
+                                class="text-primary font-medium flex gap-x-3 items-center">{{ $link }}</x-card>
                         @endforeach
 
                     </div>

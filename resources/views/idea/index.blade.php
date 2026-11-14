@@ -45,7 +45,9 @@
             <form x-data="{
                 status: 'pending',
                 'newLink': '',
-                links : []
+                links: [],
+                newStep: '',
+                steps: []
             }" method="POST" action="{{ route('idea.store') }}">
                 @csrf
                 <div class="space-y-6">
@@ -76,6 +78,38 @@
 
                         <div>
                             <fieldset class="space-y-3">
+                                <legend class="label">Actionable Steps</legend>
+
+                                <template x-for="(step , index) in steps" :key="step">
+                                    <div class="flex gap-x-2 items-center">
+
+                                        <input class="input" name="steps[]" x-model="step" readonly>
+                                        <button type="button" aria-label="Remove step" @click="steps.splice(index, 1)">
+                                            <x-lucide-x class="h-6 w-6 form-muted-icon" />
+                                        </button>
+                                    </div>
+                                </template>
+
+
+                                <div class="flex gap-x-2 items-center">
+                                    <input x-model="newStep" data-test="new-step" id="new-step"
+                                        placeholder="What needs to be done?" class="input flex-1" spellcheck="false">
+
+                                    <button type="button" data-test="submit-new-step-button"
+                                        @click="steps.push(newStep.trim()); newStep=''; "
+                                        :disabled="newStep.trim().length === 0" aria-label="Add a new step">
+                                        <x-lucide-plus class="h-6 w-6 text-primary" />
+                                    </button>
+                                </div>
+
+
+
+                            </fieldset>
+
+                        </div>
+
+                        <div>
+                            <fieldset class="space-y-3">
                                 <legend class="label">Links</legend>
 
                                 <template x-for="(link , index) in links" :key="link">
@@ -90,20 +124,12 @@
 
 
                                 <div class="flex gap-x-2 items-center">
-                                    <input 
-                                    x-model="newLink" 
-                                    type="url" 
-                                    id="new-link"
-                                    placeholder="http://example.com" 
-                                    autocomplete="url" 
-                                    class="input flex-1"
-                                    spellcheck="false">
-                                    <button 
-                                    type="button" 
-                                    data-test="submit-new-link-button"
-                                    @click="links.push(newLink.trim()); newLink=''; "
-                                    :disabled="newLink.trim().length === 0" 
-                                    aria-label="Add a new link">
+                                    <input x-model="newLink" type="url" id="new-link"
+                                        placeholder="http://example.com" autocomplete="url" class="input flex-1"
+                                        spellcheck="false">
+                                    <button type="button" data-test="submit-new-link-button"
+                                        @click="links.push(newLink.trim()); newLink=''; "
+                                        :disabled="newLink.trim().length === 0" aria-label="Add a new link">
                                         <x-lucide-plus class="h-6 w-6 text-primary" />
                                     </button>
                                 </div>
